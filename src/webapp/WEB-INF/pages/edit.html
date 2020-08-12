@@ -11,13 +11,10 @@
 <div align="center">
 
     <form action="#" th:action="@{/merge}" th:object="${user}" method="POST">
-
         <table bgcolor="#F0FFF0" border="0" cellpadding="10">
             <tr>
                 <td>User ID:</td>
-                <td>
-                    <input type="text" th:field="*{id}" readonly="readonly" />
-                </td>
+                <td> <input type="text" th:field="*{id}" readonly="readonly" /> </td>
             </tr>
             <tr>
                 <td>Name:</td>
@@ -36,7 +33,6 @@
                 <td colspan="4"><button type="submit">Push that button!</button> </td>
             </tr>
         </table>
-
     </form>
 
 </div>

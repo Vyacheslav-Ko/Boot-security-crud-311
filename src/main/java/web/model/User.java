@@ -19,7 +19,7 @@ public class User {
     private String lastName;
     @Column (name = "age")
     @NotNull
-    //@Digits(integer = )
+    //@Digits // How to realize?
     @Max(value = 127, message = "check age")
     private int age;
 
