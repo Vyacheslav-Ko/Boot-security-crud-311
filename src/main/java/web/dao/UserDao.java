@@ -1,15 +1,12 @@
 package web.dao;
 
 import web.model.User;
-
 import java.util.List;
 
+
 public interface UserDao {
-    void createUsersTable();
 
-    void dropUsersTable();
-
-    void addUser(String name, String lastName, int age);
+    void addUser(User user);
 
     void updateUser(User user);
 
@@ -17,6 +14,6 @@ public interface UserDao {
 
     List<User> getAllUsers();
 
-    void cleanUsersTable();
+    User getUserById(long id);
 
 }

@@ -6,7 +6,41 @@
     <meta charset="UTF-8">
     <title>Users manager</title>
 </head>
+
 <body>
-Hi !!!
+
+<div align="center">
+    <h2 th:text="${tableHeader}"></h2>
+    <br/>
+
+    <table border="1" cellpadding="10">
+
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Lastname</th>
+            <th>Age</th>
+            <th>Action</th>
+        </tr>
+
+        <tr th:each="user : ${allUsersList}">
+            <td th:utext="${user.getId()}">Id</td>
+            <td th:utext="${user.getName()}">Name</td>
+            <td th:utext="${user.getLastName()}">Lastname</td>
+            <td th:utext="${user.getAge()}">Age</td>
+            <td>
+                <a th:href="@{'/edit/' + ${user.id}}">Edit</a>
+                <a th:href="@{'/delete/' + ${user.id}}">Delete</a>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <h3><a href="/new">Want to add new user?</a></h3>
+
+</div>
+
 </body>
+
 </html>

@@ -13,29 +13,15 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Autowired
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
+    public void setUserDao(UserDao userDao) { this.userDao = userDao; }
+
+    @Override
+    public void addUser(User user) {
+        userDao.addUser(user);
     }
 
     @Override
-    public void createUsersTable() {
-        userDao.createUsersTable();
-    }
-
-    @Override
-    public void dropUsersTable() {
-        userDao.dropUsersTable();
-    }
-
-    @Override
-    public void addUser(String name, String lastName, int age) {
-        userDao.addUser(name, lastName, age);
-    }
-
-    @Override
-    public void updateUser(User user) { // ?????
-        userDao.updateUser(user);
-    }
+    public void updateUser(User user) { userDao.updateUser(user); }
 
     @Override
     public void removeUserById(long id) {
@@ -48,7 +34,5 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void cleanUsersTable() {
-        userDao.cleanUsersTable();
-    }
+    public User getUserById(long id) { return userDao.getUserById(id); }
 }
