@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" html lang="en">
+<!--<>-->
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Users manager</title>
 </head>
 
@@ -21,6 +21,7 @@
             <th>Lastname</th>
             <th>Age</th>
             <th>Action</th>
+            <th>Action</th>
         </tr>
 
         <tr th:each="user : ${allUsersList}">
@@ -28,10 +29,9 @@
             <td th:utext="${user.getName()}">Name</td>
             <td th:utext="${user.getLastName()}">Lastname</td>
             <td th:utext="${user.getAge()}">Age</td>
-            <td>
-                <a th:href="@{'/edit/' + ${user.id}}">Edit</a>
-                <a th:href="@{'/delete/' + ${user.id}}">Delete</a>
-            </td>
+            <td><a th:href="@{'/edit/' + ${user.id}}">Edit</a></td>
+            <td><a th:href="@{'/delete/' + ${user.id}}">Delete</a></td>
+
         </tr>
 
     </table>

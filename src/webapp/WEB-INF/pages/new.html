@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<!--<html lang="en">-->
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>User adding</title>
 </head>
 
@@ -26,6 +26,7 @@
             <tr>
                 <td>Age:</td>
                 <td><input type="text" th:field="*{age}" /></td>
+                <td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</td>
             </tr>
             <tr>
                 <td colspan="4"><button type="submit">Push that button!</button> </td>

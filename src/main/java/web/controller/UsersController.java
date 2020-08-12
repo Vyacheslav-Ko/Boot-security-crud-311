@@ -3,10 +3,14 @@ package web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import web.model.User;
 import web.service.UserService;
+
+import javax.validation.Valid;
 
 @Controller
 public class UsersController {
@@ -34,7 +38,10 @@ public class UsersController {
     }
 
     @PostMapping(value = "/save")
-        public String saveNewUser(@ModelAttribute User user) {
+        public String saveNewUser(@ModelAttribute @Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "new";
+        }
         userService.addUser(user);
         return "redirect:/";
     }
@@ -48,7 +55,10 @@ public class UsersController {
     }
 
     @PostMapping(value = "/merge")
-    public String updateUser(@ModelAttribute User user) {
+    public String updateUser(@ModelAttribute @Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "edit";
+        }
         userService.updateUser(user);
         return "redirect:/";
     }

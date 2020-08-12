@@ -1,6 +1,11 @@
 package web.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 
 @Entity
 @Table(name = "users")
@@ -13,6 +18,9 @@ public class User {
     @Column (name = "lastname")
     private String lastName;
     @Column (name = "age")
+    @NotNull
+    //@Digits(integer = )
+    @Max(value = 127, message = "check age")
     private int age;
 
     public User() {
