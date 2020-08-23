@@ -15,15 +15,13 @@
 </head>
 
 <body>
-<div>
+<div align="center">
     <th:block th:each="msg : ${messages}">
-        <h1 th:text="${msg}"></h1>
+        <h2 th:text="${msg}"></h2>
 
     </th:block>
     <br/>
     <h3><a href="/registration">New user registration</a></h3>
-    <br/>
-    <br/>
     <br/>
     <br/>
     <h3><a href="/admin">Admin panel</a></h3>

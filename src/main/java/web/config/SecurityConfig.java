@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import web.config.handler.LoginSuccessHandler;
 
-@Configuration
+@Configuration // can be delete???
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 //указываем логику обработки при логине
                 .successHandler(new LoginSuccessHandler())
-                // указываем action с формы логина
+                // указываем поле action из формы логина
                 .loginProcessingUrl("/login")
                 // Указываем параметры логина и пароля с формы логина
                 .usernameParameter("j_username")
@@ -36,14 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         http.logout()
-                // разрешаем делать логаут всем
-                .permitAll()
-                // указываем URL логаута
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                // указываем URL при удачном логауте
-                .logoutSuccessUrl("/login?logout")
-                //выклчаем кроссдоменную секьюрность (на этапе обучения неважна)
-                .and().csrf().disable();
+                .permitAll() // разрешаем делать логаут всем
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) // указываем URL логаута
+                .logoutSuccessUrl("/login?logout") // указываем URL при удачном логауте
+                .and()
+                .csrf().disable(); //выключаем кроссдоменную секьюрность (на этапе обучения неважна)
 
         http
                 // делаем страницу регистрации недоступной для авторизированных пользователей
