@@ -1,0 +1,32 @@
+<!--<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" html lang="en">
+<!--<>-->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Users manager</title>
+</head>
+
+<body>
+<div>
+    <th:block th:each="msg : ${messages}">
+        <h1 th:text="${msg}"></h1>
+
+    </th:block>
+    <br/>
+    <h3><a href="/registration">New user registration</a></h3>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <h3><a href="/admin">Admin panel</a></h3>
+</div>
+</body>
+</html>

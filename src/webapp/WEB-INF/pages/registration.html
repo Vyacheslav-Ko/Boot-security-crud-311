@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
+<!--<html lang="en">-->
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>User editing</title>
+    <title>User adding</title>
 </head>
 
 <body>
 <div align="center">
+<h2 th:text="${header}"></h2>
+<br/>
 
-    <form action="#" th:action="@{/admin/merge}" th:object="${user}" method="POST">
+    <form action="#" th:action="@{/save}" th:object="${user}" method="POST">
+
         <table bgcolor="#F0FFF0" border="0" cellpadding="10">
-            <tr>
-                <td>User ID:</td>
-                <td> <input type="text" th:field="*{id}" readonly="readonly" /> </td>
-            </tr>
             <tr>
                 <td>Username:</td>
                 <td><input type="text" th:field="*{username}" /></td>
+                <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</td>
             </tr>
             <tr>
                 <td>Password:</td>
                 <td><input type="text" th:field="*{password}" /></td>
+                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
             </tr>
             <tr>
                 <td>E-mail:</td>
                 <td><input type="text" th:field="*{email}" /></td>
-                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Age Error</td>
+                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
             </tr>
             <tr>
-                <td colspan="4"><button type="submit">Push to change!</button> </td>
+                <td colspan="4"><button type="submit">Push it!</button> </td>
             </tr>
         </table>
+
     </form>
 
 </div>

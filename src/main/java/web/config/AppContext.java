@@ -9,6 +9,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import web.model.Role;
 import web.model.User;
 
 import javax.sql.DataSource;
@@ -32,7 +33,7 @@ import java.util.Properties;
             properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
 
             factoryBean.setHibernateProperties(properties);
-            factoryBean.setAnnotatedClasses(User.class);
+            factoryBean.setAnnotatedClasses(User.class, Role.class);
             return factoryBean;
         }
 

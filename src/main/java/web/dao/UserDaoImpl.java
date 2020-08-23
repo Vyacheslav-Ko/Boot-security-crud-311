@@ -2,6 +2,7 @@ package web.dao;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import web.model.Role;
 import web.model.User;
 
 import javax.persistence.EntityManager;
@@ -17,7 +18,9 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public void addUser(User user) {
+        user.addRole(entityManager.find(Role.class, 1L));//Any 'user' will be "ROLE_USER" by default
         entityManager.persist(user);
+        entityManager.flush();
     }
 
     @Override
@@ -40,6 +43,4 @@ public class UserDaoImpl implements UserDao{
     @Transactional(readOnly = true)
     @Override
     public User getUserById(long id) { return entityManager.find(User.class, id); }
-
-
 }

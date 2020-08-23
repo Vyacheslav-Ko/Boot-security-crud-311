@@ -1,10 +1,9 @@
-package web.controller;
+package web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import web.model.User;
@@ -13,7 +12,8 @@ import web.service.UserService;
 import javax.validation.Valid;
 
 @Controller
-public class UsersController {
+//@RequestMapping("")
+public class AdminController {
 
     private UserService userService;
 
@@ -22,31 +22,14 @@ public class UsersController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/admin")
     public String usersManager(ModelMap model) {
-        model.addAttribute("tableHeader", "Users manager page");
+        model.addAttribute("tableHeader", "All users page");
         model.addAttribute("allUsersList", this.userService.getAllUsers());
         return "index";
     }
 
-    @GetMapping(value = "/new")
-    public String newUser(ModelMap model) {
-        User user = new User();
-        model.addAttribute("header", "New user adding!");
-        model.addAttribute("user", user);
-        return "new";
-    }
-
-    @PostMapping(value = "/save")
-        public String saveNewUser(@ModelAttribute @Valid User user, BindingResult result) {
-        if (result.hasErrors()) {
-            return "new";
-        }
-        userService.addUser(user);
-        return "redirect:/";
-    }
-
-    @GetMapping(value = "edit/{id}")
+    @GetMapping(value = "/admin/edit/{id}") // add - /
     public ModelAndView editUser(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("edit");
         User user = userService.getUserById(id);
@@ -54,18 +37,18 @@ public class UsersController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/merge")
+    @PostMapping(value = "/admin/merge")
     public String updateUser(@ModelAttribute @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             return "edit";
         }
         userService.updateUser(user);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 
-    @GetMapping(value = "delete/{id}")
+    @GetMapping(value = "/admin/delete/{id}") // add - /
     public String deleteUser(@PathVariable Long id) {
         userService.removeUserById(id);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 }
