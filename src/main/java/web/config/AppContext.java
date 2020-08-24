@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -18,6 +19,7 @@ import java.util.Properties;
     @Configuration
     @PropertySource("classpath:db.properties")
     @EnableTransactionManagement
+    //@EnableJpaRepositories("web")
     public class AppContext {
 
         @Autowired

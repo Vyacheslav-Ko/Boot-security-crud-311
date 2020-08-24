@@ -12,7 +12,6 @@ import web.service.UserService;
 import javax.validation.Valid;
 
 @Controller
-//@RequestMapping("")
 public class AdminController {
 
     private UserService userService;
@@ -32,7 +31,7 @@ public class AdminController {
     @GetMapping(value = "/admin/edit/{id}") // add - /
     public ModelAndView editUser(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("edit");
-        User user = userService.getUserById(id);
+        User user = userService.findById(id);
         modelAndView.addObject("user", user);
         return modelAndView;
     }

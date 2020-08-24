@@ -38,7 +38,8 @@ CREATE TABLE user_roles (
 
 -- Insert data
 
-INSERT INTO users VALUES (1, 'Slava', '1000', 'bbb@bk.ru');
+INSERT INTO users VALUES (1, 'Slava', '$2y$12$DZ5PrkS1vBQW.fEZDKYg8OQ8wqzsF3Le/nfGjUkOICe0QeR.qxjPu
+', 'bbb@bk.ru');
 
 INSERT INTO roles VALUES (1, 'ROLE_USER');
 INSERT INTO roles VALUES (2, 'ROLE_ADMIN');

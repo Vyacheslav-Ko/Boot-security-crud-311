@@ -1,6 +1,7 @@
 package web.model;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -18,16 +20,14 @@ public class User implements UserDetails {
     private Long id;
 
     @Column (name = "username")
-    //@NotBlank (message = "'Name' can not be empty")
     @Size(min = 3, message = "3 symbols minimum required")
     private String username;
 
-    //@NotBlank (message = "Password can not be empty")
     @Size(min = 6, message = "6 symbols minimum required")
     @Column (name = "password")
     private String password;
 
-    @Column (name = "email", unique = true)// unique ???
+    @Column (name = "email", unique = true)//
     @Email (message = "E-mail is not valid")
     @NotBlank (message = "Email can not be empty")
     private String email;
@@ -35,7 +35,7 @@ public class User implements UserDetails {
     @ManyToMany//fetch/cascade needed
     @JoinTable(
             name = "user_roles",
-            joinColumns = { @JoinColumn(name = "user_id") }, //фигурные скобки
+            joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
             )
     private Set<Role> roles = new HashSet<>();
@@ -115,6 +115,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return mapRolesToAuthorities(getRoles());
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 }
