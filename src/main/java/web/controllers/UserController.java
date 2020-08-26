@@ -47,7 +47,7 @@ public class UserController {
 
 	@GetMapping(value = "/registration")
 	public String newUser(ModelMap model) {
-		User user = new User();
+		User user = new User();//сократить
 		model.addAttribute("header", "User registration");
 		model.addAttribute("user", user);
 		return "registration";

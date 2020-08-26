@@ -1,5 +1,6 @@
 package web.config;
 
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import web.model.Role;
 import web.model.User;
@@ -19,7 +22,7 @@ import java.util.Properties;
     @Configuration
     @PropertySource("classpath:db.properties")
     @EnableTransactionManagement
-    //@EnableJpaRepositories("web")
+    @EnableJpaRepositories("web")
     public class AppContext {
 
         @Autowired
@@ -54,5 +57,22 @@ import java.util.Properties;
             HibernateTransactionManager transactionManager = new HibernateTransactionManager();
             transactionManager.setSessionFactory(sessionFactory().getObject());
             return transactionManager;
+        }
+
+        @Bean
+        public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+            LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+            entityManagerFactoryBean.setDataSource(dataSource());
+            entityManagerFactoryBean.setPackagesToScan("web");
+            entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+            entityManagerFactoryBean.setJpaProperties(sessionFactory().getHibernateProperties());
+            return entityManagerFactoryBean;
+        }
+
+        @Bean
+        public JpaTransactionManager jpaTransactionManager() {
+            JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+            jpaTransactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+            return jpaTransactionManager;
         }
 }
