@@ -40,9 +40,9 @@ public class UserController {
 		return "/hello";
 	}
 
-    @GetMapping(value = "login")
+    @GetMapping(value = "/login")
     public String loginPage() {
-        return "/login";
+        return "login";
     }
 
 	@GetMapping(value = "/registration")

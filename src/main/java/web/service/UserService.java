@@ -59,11 +59,6 @@ public class UserService implements UserDetailsService {
 
     public void addUser (User user) {
         user.addRole(roleRepository.getOne(1L));
-        System.out.println("+++++++++++++++++++++");
-        System.out.println("+++++++++++++++++++++");
-        System.out.println("Role added");
-        System.out.println("+++++++++++++++++++++");
-        System.out.println("+++++++++++++++++++++");
         //user.addRole(roleRepository.findAll().get(1));// ???????????
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
