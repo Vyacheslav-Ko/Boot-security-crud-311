@@ -69,7 +69,7 @@ import java.util.Properties;
             return entityManagerFactoryBean;
         }
 
-        @Bean
+        @Bean(name="transactionManager")// добавил и заработала админ-панель
         public JpaTransactionManager jpaTransactionManager() {
             JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
             jpaTransactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
