@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import web.model.User;
+import web.service.UserDetailsServiceAdded;
 import web.service.UserService;
 
 import javax.validation.Valid;
@@ -14,24 +15,24 @@ import javax.validation.Valid;
 @Controller
 public class AdminController {
 
-    private UserService userService;
+    private UserDetailsServiceAdded userDetailsServiceAdded;
 
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public AdminController(UserDetailsServiceAdded userDetailsServiceAdded) {
+        this.userDetailsServiceAdded = userDetailsServiceAdded;
     }
 
     @GetMapping(value = "/admin")
     public String usersManager(ModelMap model) {
         model.addAttribute("tableHeader", "All users page");
-        model.addAttribute("allUsersList", this.userService.getAllUsers());
+        model.addAttribute("allUsersList", this.userDetailsServiceAdded.getAllUsers());
         return "index";
     }
 
     @GetMapping(value = "/admin/edit/{id}") // add - /
     public ModelAndView editUser(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("edit");
-        User user = userService.findById(id);
+        User user = userDetailsServiceAdded.findById(id);
         modelAndView.addObject("user", user);
         return modelAndView;
     }
@@ -41,13 +42,13 @@ public class AdminController {
         if (result.hasErrors()) {
             return "edit";
         }
-        userService.updateUser(user);
+        userDetailsServiceAdded.updateUser(user);
         return "redirect:/admin";
     }
 
     @GetMapping(value = "/admin/delete/{id}") // add - /
     public String deleteUser(@PathVariable Long id) {
-        userService.removeUserById(id);
+        userDetailsServiceAdded.removeUserById(id);
         return "redirect:/admin";
     }
 }

@@ -1,15 +1,15 @@
 package web.model;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Entity
@@ -21,7 +21,7 @@ public class User implements UserDetails {
 
     @Column (name = "username")
     @Size(min = 3, message = "3 symbols minimum required")
-    private String username;
+    private String usernameU;
 
     @Size(min = 6, message = "6 symbols minimum required")
     @Column (name = "password")
@@ -32,7 +32,7 @@ public class User implements UserDetails {
     @NotBlank (message = "Email can not be empty")
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)//LAZY - 2808
     @JoinTable(
             name = "user_roles",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -44,7 +44,7 @@ public class User implements UserDetails {
     }
 
     public User(String username, String password, String email) {
-        this.username = username;
+        this.usernameU = username;
         this.password = password;
         this.email = email;
     }
@@ -66,10 +66,10 @@ public class User implements UserDetails {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.usernameU = username;
     }
     public String getUsername() {
-        return username;
+        return usernameU;
     }
 
     public String getPassword() {

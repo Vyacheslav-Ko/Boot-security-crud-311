@@ -2,12 +2,14 @@ package web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
+import web.service.UserDetailsServiceAdded;
 import web.service.UserService;
 
 import javax.validation.Valid;
@@ -19,11 +21,11 @@ import java.util.List;
 //@RequestMapping("/")
 public class UserController {
 
-	private UserService userService;
+	private UserDetailsServiceAdded userDetailsServiceAdded;
 
 	@Autowired
-	public void setUserService(UserService userService) {
-		this.userService = userService;
+	public UserController(UserDetailsServiceAdded userDetailsServiceAdded) {
+		this.userDetailsServiceAdded = userDetailsServiceAdded;
 	}
 
 	@GetMapping(value = "hello")
@@ -58,7 +60,7 @@ public class UserController {
 		if (result.hasErrors()) {
 			return "registration";
 		}
-		userService.addUser(user);
-		return "redirect:/hello";
+		userDetailsServiceAdded.addUser(user);
+		return "redirect:/login";
 	}
 }

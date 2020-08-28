@@ -20,31 +20,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+        //("userDetailsService")
+@Transactional
+public class UserService implements UserDetailsServiceAdded {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
+    @Override
     public User findById (Long id) {
         return userRepository.getOne(id);
     }
 
     @Override
-    //@Transactional//???
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
@@ -53,23 +49,27 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
     }
+
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
+    @Override
     public void addUser (User user) {
         user.addRole(roleRepository.getOne(1L));
-        //user.addRole(roleRepository.findAll().get(1));// ???????????
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
+    @Override
     public void updateUser(User user) { userRepository.save(user); }
 
-    public void removeUserById(long id) {
+    @Override
+    public void removeUserById(Long id) {
         userRepository.deleteById(id);
     }
 
+    @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

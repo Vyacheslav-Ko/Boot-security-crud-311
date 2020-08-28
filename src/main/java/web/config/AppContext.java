@@ -1,45 +1,44 @@
 package web.config;
 
-import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import web.model.Role;
-import web.model.User;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-    @Configuration
+@Configuration
+    @ComponentScan(value = "web") //2708
     @PropertySource("classpath:db.properties")
-    @EnableTransactionManagement
+    @EnableTransactionManagement(proxyTargetClass = true) //скобки 2708
     @EnableJpaRepositories("web")
     public class AppContext {
 
-        @Autowired
+
         private Environment environment;
 
-        @Bean
-        public LocalSessionFactoryBean sessionFactory() {
-            LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
-            factoryBean.setDataSource(dataSource());
+        @Autowired
+        public AppContext (Environment environment) {
+            this.environment = environment;
+        }
 
-            Properties properties = new Properties();
-            properties.put("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
-            properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
-
-            factoryBean.setHibernateProperties(properties);
-            factoryBean.setAnnotatedClasses(User.class, Role.class);
-            return factoryBean;
+        private Properties hibernateProperties() {
+            Properties props = new Properties();
+            props.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
+            props.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+            props.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
+            return props;
         }
 
         @Bean
@@ -53,26 +52,20 @@ import java.util.Properties;
         }
 
         @Bean
-        public HibernateTransactionManager getTransactionManager() {
-            HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-            transactionManager.setSessionFactory(sessionFactory().getObject());
-            return transactionManager;
-        }
-
-        @Bean
         public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
             LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
             entityManagerFactoryBean.setDataSource(dataSource());
             entityManagerFactoryBean.setPackagesToScan("web");
-            entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-            entityManagerFactoryBean.setJpaProperties(sessionFactory().getHibernateProperties());
+            JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+            entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
+            entityManagerFactoryBean.setJpaProperties(hibernateProperties());
             return entityManagerFactoryBean;
         }
 
-        @Bean(name="transactionManager")// добавил и заработала админ-панель
-        public JpaTransactionManager jpaTransactionManager() {
+        @Bean
+        public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
             JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-            jpaTransactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+            jpaTransactionManager.setEntityManagerFactory(entityManagerFactory);
             return jpaTransactionManager;
         }
 }
