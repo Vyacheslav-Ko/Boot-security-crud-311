@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,15 +27,16 @@ public class UserService implements UserDetailsServiceAdded {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
     }
-
-    @Override
-    public User findById (Long id) {
-        return userRepository.getOne(id);
+    @Autowired
+    public void setRoleRepository(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -49,9 +48,13 @@ public class UserService implements UserDetailsServiceAdded {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
     }
-
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
+    }
+
+    @Override
+    public User findById (Long id) {
+        return userRepository.getOne(id);
     }
 
     @Override
@@ -62,17 +65,20 @@ public class UserService implements UserDetailsServiceAdded {
     }
 
     @Override
-    public void updateUser(User user) { userRepository.save(user); }
+    public void updateUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user); }
 
     @Override
     public void removeUserById(Long id) {
         userRepository.deleteById(id);
     }
+        //User user = findById(id);
+        //System.out.println(user);
+
 
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
-
 }

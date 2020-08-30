@@ -21,7 +21,7 @@ public class User implements UserDetails {
 
     @Column (name = "username")
     @Size(min = 3, message = "3 symbols minimum required")
-    private String usernameU;
+    private String username;
 
     @Size(min = 6, message = "6 symbols minimum required")
     @Column (name = "password")
@@ -32,7 +32,7 @@ public class User implements UserDetails {
     @NotBlank (message = "Email can not be empty")
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)//LAZY - 2808
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)//LAZY - ?
     @JoinTable(
             name = "user_roles",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -44,7 +44,7 @@ public class User implements UserDetails {
     }
 
     public User(String username, String password, String email) {
-        this.usernameU = username;
+        this.username = username;
         this.password = password;
         this.email = email;
     }
@@ -66,10 +66,10 @@ public class User implements UserDetails {
     }
 
     public void setUsername(String username) {
-        this.usernameU = username;
+        this.username = username;
     }
     public String getUsername() {
-        return usernameU;
+        return username;
     }
 
     public String getPassword() {
@@ -118,12 +118,13 @@ public class User implements UserDetails {
         return getRoles();
     }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return mapRolesToAuthorities(getRoles());
-//    }
-//
-//    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-//        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
-//    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id = " + id +
+                ", username = '" + username + '\'' +
+                ", password = '" + password + '\'' +
+                ", email = '" + email + '\'' +
+                '}';
+    }
 }

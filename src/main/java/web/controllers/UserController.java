@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-//@RequestMapping("/")
+@Transactional
 public class UserController {
 
 	private UserDetailsServiceAdded userDetailsServiceAdded;
 
 	@Autowired
-	public UserController(UserDetailsServiceAdded userDetailsServiceAdded) {
+	public void setUserDetailsServiceAdded(UserDetailsServiceAdded userDetailsServiceAdded) {
 		this.userDetailsServiceAdded = userDetailsServiceAdded;
 	}
 
@@ -35,9 +36,9 @@ public class UserController {
 		messages.add("I'm your 1st Spring MVC-SECURITY application");
 		messages.add("5.2.8 version by aug'20 ");
 		messages.add("---------------------------------------------");
-		messages.add("You are logged as: " + principal.getName());
+		messages.add("Вы вошли под именем: " + principal.getName());
 		messages.add("---------------------------------------------");
-		messages.add("The same thing - " + SecurityContextHolder.getContext().getAuthentication().getName());
+		messages.add("You're logged as: " + SecurityContextHolder.getContext().getAuthentication().getName());
 		model.addAttribute("messages", messages);
 		return "/hello";
 	}
@@ -62,5 +63,15 @@ public class UserController {
 		}
 		userDetailsServiceAdded.addUser(user);
 		return "redirect:/login";
+	}
+
+	@GetMapping("/user")
+	public String userPage(ModelMap model, Principal principal){
+		List<String> messages = new ArrayList<>();
+		messages.add("Hi!");
+		messages.add("You're logged as: " + principal.getName() + " and you can do is nothing :)");
+		messages.add("---------------------------------------------------------------------------------");
+		model.addAttribute("messages", messages);
+		return "user";
 	}
 }

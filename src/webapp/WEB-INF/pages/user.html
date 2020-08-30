@@ -1,17 +1,26 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" html lang="en">
-<!--<>-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"lang="en">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Users manager</title>
+    <title>Users page</title>
 </head>
 
 <body>
-<div>
-    <h2 th:text="thymeleaf"></h2>
-    <br/>
-    <h3><a href="/registration">New user registration</a></h3>
+
+<div align="right" sec:authorize="isAuthenticated()">
+    <h2><a th:href="@{/logout}" role="button">Logout</a></h2>
 </div>
+
+<div align="center">
+    <br/>
+    <th:block th:each="msg : ${messages}">
+        <h2 th:text="${msg}"></h2>
+    </th:block>
+    <br/><br/><br/>
+    <h3><a th:href="@{/admin}">Admin panel</a></h3>
+</div>
+
 </body>
+
 </html>

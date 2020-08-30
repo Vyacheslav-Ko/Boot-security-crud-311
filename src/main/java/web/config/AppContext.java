@@ -18,20 +18,15 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@Configuration
+    @Configuration
     @ComponentScan(value = "web") //2708
     @PropertySource("classpath:db.properties")
     @EnableTransactionManagement(proxyTargetClass = true) //скобки 2708
     @EnableJpaRepositories("web")
     public class AppContext {
 
-
-        private Environment environment;
-
         @Autowired
-        public AppContext (Environment environment) {
-            this.environment = environment;
-        }
+        private Environment environment;
 
         private Properties hibernateProperties() {
             Properties props = new Properties();
@@ -56,6 +51,7 @@ import java.util.Properties;
             LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
             entityManagerFactoryBean.setDataSource(dataSource());
             entityManagerFactoryBean.setPackagesToScan("web");
+
             JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
             entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
             entityManagerFactoryBean.setJpaProperties(hibernateProperties());
@@ -63,6 +59,7 @@ import java.util.Properties;
         }
 
         @Bean
+                //(name="transactionManager")
         public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
             JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
             jpaTransactionManager.setEntityManagerFactory(entityManagerFactory);

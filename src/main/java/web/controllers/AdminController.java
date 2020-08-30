@@ -1,7 +1,9 @@
 package web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -13,26 +15,36 @@ import web.service.UserService;
 import javax.validation.Valid;
 
 @Controller
+@Transactional
 public class AdminController {
 
     private UserDetailsServiceAdded userDetailsServiceAdded;
 
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    public AdminController(UserDetailsServiceAdded userDetailsServiceAdded) {
+    public void setUserDetailsServiceAdded(UserDetailsServiceAdded userDetailsServiceAdded) {
         this.userDetailsServiceAdded = userDetailsServiceAdded;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping(value = "/admin")
     public String usersManager(ModelMap model) {
-        model.addAttribute("tableHeader", "All users page");
+        model.addAttribute("tableHeader", "Admin's cave");
         model.addAttribute("allUsersList", this.userDetailsServiceAdded.getAllUsers());
         return "index";
     }
 
-    @GetMapping(value = "/admin/edit/{id}") // add - /
+    @GetMapping(value = "/admin/edit/{id}")
     public ModelAndView editUser(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("edit");
         User user = userDetailsServiceAdded.findById(id);
+// WTF ???
+        System.out.println(user);
         modelAndView.addObject("user", user);
         return modelAndView;
     }
@@ -46,9 +58,11 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping(value = "/admin/delete/{id}") // add - /
-    public String deleteUser(@PathVariable Long id) {
+    @GetMapping("/admin/delete/{id}")
+    public ModelAndView deleteUser(@PathVariable("id") Long id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/admin");
         userDetailsServiceAdded.removeUserById(id);
-        return "redirect:/admin";
+        return modelAndView;
     }
 }
