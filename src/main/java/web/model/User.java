@@ -32,7 +32,8 @@ public class User implements UserDetails {
     @NotBlank (message = "Email can not be empty")
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)//ALL - ?
+    @ManyToMany(fetch = FetchType.EAGER, cascade =
+            {CascadeType.PERSIST, CascadeType.MERGE})//cascade = CascadeType.ALL
     @JoinTable(
             name = "user_roles",
             joinColumns = { @JoinColumn(name = "user_id") },
