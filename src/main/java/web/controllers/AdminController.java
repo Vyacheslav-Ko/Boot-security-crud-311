@@ -42,10 +42,8 @@ public class AdminController {
     @GetMapping(value = "/admin/edit/{id}")
     public ModelAndView editUser(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("edit");
-        User user = userDetailsServiceAdded.findById(id);
-// WTF ???
-        System.out.println(user);
-        modelAndView.addObject("user", user);
+        modelAndView.addObject("user", userDetailsServiceAdded.findById(id));
+        modelAndView.toString();
         return modelAndView;
     }
 
