@@ -69,7 +69,7 @@ public class UserController {
 	public String userPage(ModelMap model, Principal principal){
 		List<String> messages = new ArrayList<>();
 		messages.add("Hi!");
-		messages.add("You're logged as: " + principal.getName() + " and you can do is nothing :)");
+		messages.add("You're logged as: " + principal.getName() + " and all you can do is nothing :)");
 		messages.add("---------------------------------------------------------------------------------");
 		model.addAttribute("messages", messages);
 		return "user";
