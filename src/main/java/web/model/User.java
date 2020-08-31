@@ -27,7 +27,7 @@ public class User implements UserDetails {
     @Column (name = "password")
     private String password;
 
-    @Column (name = "email", unique = true)//
+    @Column (name = "email")//, unique = true
     @Email (message = "E-mail is not valid")
     @NotBlank (message = "Email can not be empty")
     private String email;
