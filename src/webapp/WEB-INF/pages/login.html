@@ -7,24 +7,31 @@
 </head>
 
 <body>
+<div align="right">
+    <h3><a th:href="@{/registration}">Create account</a></h3>
+</div>
 <div align="center">
 
     <br/><br/>
 
     <form th:action="@{/login}" method="post">
 
-        <div><label> Username: <input type="text" name="username"/> </label></div>
-
-        <div><label> Password: <input type="password" name="password"/> </label></div>
-
-        <div><input type="submit" value="Sign In"/></div>
+        <table>
+            <tr>
+                <td>User:</td>
+                <td><input type='text' name='username' value='Username'></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type='password' name='password' value='Password'/></td>
+            </tr>
+            <tr>
+                <td><input name="submit" type="submit" value="Sign in" /></td>
+                <td></td>
+            </tr>
+        </table>
 
     </form>
-
-    <br/><br/>
-    <h4><a href="/registration">Create new account</a></h4>
-    <h4><a href="/registration">Создать новый аккаунт</a></h4>
-
 </div>
 
 </body>
