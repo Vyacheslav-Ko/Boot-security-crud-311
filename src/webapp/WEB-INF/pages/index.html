@@ -11,9 +11,10 @@
 <div align="right" sec:authorize="isAuthenticated()">
     <h2><a th:href="@{/logout}" role="button">Logout</a></h2>
 </div>
+
 <div align="center">
-    <h2 th:text="${tableHeader}"></h2>
-    <br/>
+    <h2 th:inline="text">Hello, [[${#httpServletRequest.remoteUser}]]!</h2><br/>
+    <h2 th:text="${tableHeader}"></h2><br/>
 
     <table border="1" cellpadding="10">
 

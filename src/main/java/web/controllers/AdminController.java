@@ -34,7 +34,7 @@ public class AdminController {
 
     @GetMapping(value = "/admin")
     public String usersManager(ModelMap model) {
-        model.addAttribute("tableHeader", "Admin's cave");
+        model.addAttribute("tableHeader", "you are now in the admin's cave");
         model.addAttribute("allUsersList", this.userDetailsServiceAdded.getAllUsers());
         return "index";
     }
