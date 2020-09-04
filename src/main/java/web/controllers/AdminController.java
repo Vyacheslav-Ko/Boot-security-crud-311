@@ -35,7 +35,7 @@ public class AdminController {
     @GetMapping(value = "/admin")
     public String usersManager(ModelMap model) {
         model.addAttribute("tableHeader", "you are now in the admin's cave");
-        model.addAttribute("allUsersList", this.userDetailsServiceAdded.getAllUsers());
+        model.addAttribute("allUsersList", userDetailsServiceAdded.getAllUsers());
         return "index";
     }
 
@@ -47,7 +47,7 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/admin/merge")
+    @PostMapping(value = "/admin/edit")
     public String updateUser(@ModelAttribute @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             return "edit";
@@ -57,10 +57,8 @@ public class AdminController {
     }
 
     @GetMapping("/admin/delete/{id}")
-    public ModelAndView deleteUser(@PathVariable("id") Long id){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin");
+    public String deleteUser(@PathVariable("id") Long id){
         userDetailsServiceAdded.removeUserById(id);
-        return modelAndView;
+        return "redirect:/admin";
     }
 }

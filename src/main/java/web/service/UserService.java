@@ -66,16 +66,13 @@ public class UserService implements UserDetailsServiceAdded {
 
     @Override
     public void updateUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user); }
 
     @Override
     public void removeUserById(Long id) {
         userRepository.deleteById(id);
     }
-        //User user = findById(id);
-        //System.out.println(user);
-
 
     @Override
     public List<User> getAllUsers() {
