@@ -34,8 +34,10 @@ public class AdminController {
 
     @GetMapping(value = "/admin")
     public String usersManager(ModelMap model) {
-        model.addAttribute("tableHeader", "you are now in the admin's cave");
+        model.addAttribute("tableHeader", "Admin panel");
+        model.addAttribute("allusers", "All users");
         model.addAttribute("allUsersList", userDetailsServiceAdded.getAllUsers());
+        model.addAttribute("email", userDetailsServiceAdded.findById(1L).getEmail() + " with roles: ADMIN USER");
         return "index";
     }
 
