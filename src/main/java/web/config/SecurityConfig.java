@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()//тут мы предоставляем разрешения для следующих url
                 .antMatchers("/save*").permitAll()
-                .antMatchers("/login*", "/registration*").anonymous()// access denied if already logged-in
+                .antMatchers("/login*").anonymous()// access denied if already logged-in , "/registration*"
                 .antMatchers("/user*").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/hello", "/admin**").access("hasRole('ADMIN')").anyRequest().authenticated();
     }

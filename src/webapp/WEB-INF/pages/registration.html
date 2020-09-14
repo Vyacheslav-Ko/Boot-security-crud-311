@@ -16,28 +16,48 @@
 <br/>
 
     <form action="#" th:action="@{/save}" th:object="${user}" method="POST">
-
-        <table bgcolor="#F0FFF0" border="0" cellpadding="10">
+        <table border="0">
+            <tr><td><strong>Firstname</strong></td></tr>
             <tr>
-                <td>Username:</td>
-                <td><input type="text" th:field="*{username}" /></td>
-                <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</td>
+                <td><input type="text" th:field="*{firstname}" required/></td>
+                <td th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">Firstname Error</td>
             </tr>
+
+            <tr><td><strong>Lastname</strong></td></tr>
             <tr>
-                <td>Password:</td>
-                <td><input type="text" th:field="*{password}" /></td>
+                <td><input type="text" th:field="*{lastname}" required/></td>
+                <td th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Lastname Error</td>
+            </tr>
+
+            <tr><td><strong>Age</strong></td></tr>
+            <tr>
+                <td><input type="number" th:field="*{age}" required pattern="^[ 0-9]+$" min="1" max="128" size = "30"/></td>
+                <td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</td>
+            </tr>
+
+            <tr><td><strong>Email</strong></td></tr>
+            <tr>
+                <td><input type="email" th:field="*{username}" required/></td>
+                <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">E-mail Error</td>
+
+            </tr><td><strong>Password</strong></td></tr>
+            <tr>
+                <td><input type="text" th:field="*{password}" required/></td>
                 <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
             </tr>
+
+            </tr><td><strong>Role</strong></td></tr>
+            <tr><td>
+                <select size="2" class="form-control" th:field="*{flagRole}" id="flagRole">
+                    <option th:value="${2}">Admin </option>
+                    <option selected th:value="${1}">User</option>
+                </select>
+            </td></tr>
+
             <tr>
-                <td>E-mail:</td>
-                <td><input type="text" th:field="*{email}" /></td>
-                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
-            </tr>
-            <tr>
-                <td colspan="4"><button type="submit">Push it!</button> </td>
+                <td colspan="4"><button type="submit" class="btn btn-success my-2">Add new user</button></td>
             </tr>
         </table>
-
     </form>
 
 </div>

@@ -59,6 +59,9 @@ public class UserService implements UserDetailsServiceAdded {
 
     @Override
     public void addUser (User user) {
+        if (user.getFlagRole() == 2) {
+            user.addRole(roleRepository.getOne(2L));
+        }
         user.addRole(roleRepository.getOne(1L));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -77,5 +80,13 @@ public class UserService implements UserDetailsServiceAdded {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+
+    //to del
+    @Override
+    public User findByEmail (String username) {
+        User user = userRepository.findByUsername(username);
+        return user;
     }
 }

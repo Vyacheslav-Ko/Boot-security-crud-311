@@ -11,4 +11,5 @@ public interface UserDetailsServiceAdded extends UserDetailsService {
     void removeUserById(Long id);
     List<User> getAllUsers();
     User findById(Long id);
+    User findByEmail (String username);
 }

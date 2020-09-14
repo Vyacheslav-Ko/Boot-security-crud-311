@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Collection;
@@ -19,18 +20,30 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (name = "username")
-    @Size(min = 3, message = "3 symbols minimum required")
+    @Column (name = "firstname")
+    @Size(min = 2, message = "2 symbols minimum required")
+    private String firstname;
+
+    @Column (name = "lastname")
+    @Size(min = 2, message = "2 symbols minimum required")
+    private String lastname;
+
+    @Column (name = "age")
+    @Max(value = 127, message = "value must be between 0 and 127")
+    private int age;
+
+    @Column (name = "email")//, unique = true
+    @Email (message = "E-mail is not valid")
+    @NotBlank (message = "E-mail can not be empty")
     private String username;
 
     @Size(min = 6, message = "6 symbols minimum required")
     @Column (name = "password")
     private String password;
 
-    @Column (name = "email")//, unique = true
-    @Email (message = "E-mail is not valid")
-    @NotBlank (message = "Email can not be empty")
-    private String email;
+    @Column (name = "flagrole")
+    @NotBlank (message = "At least one is needed")
+    private int flagRole = 1;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade =
             {CascadeType.PERSIST, CascadeType.MERGE})//cascade = CascadeType.ALL
@@ -44,10 +57,40 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, String email) {
+    public User(@Size(min = 2, message = "2 symbols minimum required") String firstname
+            , @Size(min = 2, message = "2 symbols minimum required") String lastname
+            , @Max(value = 127, message = "value must be between 0 and 127") int age
+            , @Email(message = "E-mail is not valid") @NotBlank(message = "Email can not be empty") String username
+            , @Size(min = 6, message = "6 symbols minimum required") String password)
+    {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.age = age;
         this.username = username;
         this.password = password;
-        this.email = email;
+    }
+
+    public User(@Size(min = 2, message = "2 symbols minimum required") String firstname
+            , @Size(min = 2, message = "2 symbols minimum required") String lastname
+            , @Max(value = 127, message = "value must be between 0 and 127") int age
+            , @Email(message = "E-mail is not valid") @NotBlank(message = "Email can not be empty") String username
+            , @Size(min = 6, message = "6 symbols minimum required") String password
+            , int flagRole)
+    {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+        this.flagRole = flagRole;
+    }
+
+    public int getFlagRole() {
+        return flagRole;
+    }
+
+    public void setFlagRole(int flagRole) {
+        this.flagRole = flagRole;
     }
 
     public void addRole(Role role) {
@@ -66,13 +109,36 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getFirstname() {
+        return firstname;
     }
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
     public String getUsername() {
         return username;
     }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -80,18 +146,19 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String rolesInString() {
+        String ris = "";
+        for (Role role : getRoles()) {
+            ris = ris + role.getName().substring(5) + " ";
+        }
+        return ris;
     }
 
     @Override
@@ -122,10 +189,11 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return "User{" +
-                "id = " + id +
-                ", username = '" + username + '\'' +
-                ", password = '" + password + '\'' +
-                ", email = '" + email + '\'' +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", age=" + age +
+                ", email='" + username + '\'' +
                 '}';
     }
 }

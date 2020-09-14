@@ -50,28 +50,34 @@ public class UserController {
 
 	@GetMapping(value = "/registration")
 	public String newUser(ModelMap model) {
-		User user = new User();//сократить
 		model.addAttribute("header", "User registration");
-		model.addAttribute("user", user);
+		model.addAttribute("user", new User());
 		return "registration";
 	}
 
 	@PostMapping(value = "/save")
-	public String saveNewUser(@ModelAttribute @Valid User user, BindingResult result) {
+	public String saveNewUser(@ModelAttribute("user") @Valid User user,
+							  BindingResult result) {
+		User existing = userDetailsServiceAdded.findByEmail(user.getUsername());
+		if (existing != null){
+			result.rejectValue("username", null, "There is already an account registered with that email");
+		}
 		if (result.hasErrors()) {
 			return "registration";
 		}
 		userDetailsServiceAdded.addUser(user);
-		return "redirect:/login";
+		return "redirect:/admin";
 	}
 
 	@GetMapping("/user")
 	public String userPage(ModelMap model, Principal principal){
-		List<String> messages = new ArrayList<>();
-		messages.add("Hi!");
-		messages.add("You're logged as: " + principal.getName() + " and all you can do is nothing :)");
-		messages.add("---------------------------------------------------------------------------------");
-		model.addAttribute("messages", messages);
+		model.addAttribute("email", principal.getName() + " with roles: USER");
+		model.addAttribute("tableHeader", "User information-page");
+		model.addAttribute("userheader", "About user");
+
+		model.addAttribute("user", new User());
+		model.addAttribute("userinfo", userDetailsServiceAdded.findByEmail(principal.getName()));
+
 		return "user";
 	}
 }
